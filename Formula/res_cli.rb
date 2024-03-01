@@ -5,11 +5,14 @@ class ResCli < Formula
     sha256 "11f3d8b5c0864a9d22a9c07ebd39beaac54ecd3677e3b6f262c13162e0871d47"
     version "nightly"
   
-    depends_on "ruby"
+    depends_on "ruby" => :build
   
     def install
-      libexec.install Dir["lib/*"]
-      bin.install "lib/res_cli/cli.rb" => "res_cli"
+      ENV["GEM_HOME"] = libexec
+      system "gem", "install", "--ignore-dependencies", "--no-document", "res_cli-0.1.0.gem"
+  
+      bin.install libexec/"bin/res_cli"
+      bin.env_script_all_files(libexec/"bin", GEM_HOME: ENV["GEM_HOME"])
     end
   
     test do
