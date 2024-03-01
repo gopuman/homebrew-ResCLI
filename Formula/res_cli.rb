@@ -9,7 +9,7 @@ class ResCli < Formula
   
     def install
       libexec.install Dir["lib/*"]
-      bin.install "#{libexec}/res_cli/cli.rb" => "res_cli"
+      bin.install "lib/res_cli/cli.rb" => "res_cli"
     end
   
     test do
