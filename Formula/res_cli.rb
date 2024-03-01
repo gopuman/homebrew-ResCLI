@@ -8,11 +8,18 @@ class ResCli < Formula
     depends_on "ruby" => :build
   
     def install
+      # Install the gem to the libexec directory
       ENV["GEM_HOME"] = libexec
       system "gem", "install", "--ignore-dependencies", "--no-document", "res_cli-0.1.0.gem"
   
-      bin.install libexec/"bin/res_cli"
-      bin.env_script_all_files(libexec/"bin", GEM_HOME: ENV["GEM_HOME"])
+      # Create an executable script that loads the gem
+      (bin/"res_cli").write <<~EOS
+        #!/bin/bash
+        GEM_HOME="#{libexec}" exec "#{libexec}/bin/res_cli" "$@"
+      EOS
+  
+      # Make the script executable
+      chmod 0555, bin/"res_cli"
     end
   
     test do
